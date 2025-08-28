@@ -1,0 +1,22 @@
+{
+	"name": "x3p0-portfolio",
+	"description": "Portfolio plugin for WordPress.",
+	"author": "Justin Tadlock",
+	"homepage": "https://github.com/x3p0-dev/x3p0-portfolio",
+	"scripts": {
+		"start": "wp-scripts start --webpack-src-dir=resources --output-path=public",
+		"build": "wp-scripts build --webpack-src-dir=resources --output-path=public"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/x3p0-dev/x3p0-portfolio.git"
+	},
+	"bugs": {
+		"url": "https://github.com/x3p0-dev/x3p0-portfolio/issues"
+	},
+	"devDependencies": {
+		"@wordpress/scripts": "^30.21.0",
+		"path": "^0.12.7",
+		"webpack-remove-empty-scripts": "^1.1.1"
+	}
+}

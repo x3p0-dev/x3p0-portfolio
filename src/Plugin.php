@@ -90,6 +90,7 @@ class Plugin implements Container
 			$this->get('rewrite')
 		));
 
+		$this->instance('author',    new Author($this->get('rewrite')));
 		$this->instance('taxonomy',  new Taxonomy($this->get('rewrite')));
 		$this->instance('post.meta', new PostMeta());
 		$this->instance('editor',    new Editor());

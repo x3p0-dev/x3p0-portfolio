@@ -16,6 +16,7 @@ namespace X3P0\Portfolio;
 use WP_Post;
 use X3P0\Portfolio\Contracts\Bootable;
 use X3P0\Portfolio\Settings\Store;
+use X3P0\Portfolio\Support\Rewrite;
 
 class PostType implements Bootable
 {

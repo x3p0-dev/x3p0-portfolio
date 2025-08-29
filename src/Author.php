@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace X3P0\Portfolio;
 
 use X3P0\Portfolio\Contracts\Bootable;
+use X3P0\Portfolio\Settings\Store;
+use X3P0\Portfolio\Support\Rewrite;
 
 /**
  * Handles actions and filters related to portfolio project authors.
@@ -23,18 +25,46 @@ class Author implements Bootable
 	/**
 	 * Sets up the default object state.
 	 */
-	public function __construct(protected Rewrite $rewrite)
-	{}
+	public function __construct(
+		protected Store $settings,
+		protected Rewrite $rewrite
+	) {}
 
 	/**
 	 * @inheritDoc
 	 */
 	public function boot(): void
 	{
+		add_action('init', [$this, 'register'], 5);
 		add_filter('author_link', [$this, 'authorLinkFilter'], 10, 3);
 		add_filter('document_title_parts', [$this, 'documentTitlePartsFilter']);
 		add_filter('get_the_archive_title', [$this, 'archiveTitleFilter']);
 		add_filter('get_the_archive_description', [$this, 'archiveDescriptionFilter']);
+	}
+
+	/**
+	 * Adds custom rewrite rules for author archives.
+	 */
+	public function register(): void
+	{
+		$project_type = PostType::NAME;
+		$author_slug  = $this->rewrite->getAuthorSlug();
+
+		// Where to place the rewrite rules. If no rewrite base, put
+		// them at the bottom.
+		$where = $this->settings->get('author_rewrite_base') ? 'top' : 'bottom';
+
+		add_rewrite_rule(
+			$author_slug . '/([^/]+)/page/?([0-9]{1,})/?$',
+			'index.php?post_type=' . $project_type . '&author_name=$matches[1]&paged=$matches[2]',
+			$where
+		);
+
+		add_rewrite_rule(
+			$author_slug . '/([^/]+)/?$',
+			'index.php?post_type=' . $project_type . '&author_name=$matches[1]',
+			$where
+		);
 	}
 
 	/**
@@ -58,7 +88,7 @@ class Author implements Bootable
 
 		return add_query_arg(
 			[
-				'post_type' => ccp_get_project_post_type(),
+				'post_type'   => PostType::NAME,
 				'author_name' => $author_nicename
 			],
 			home_url('/')

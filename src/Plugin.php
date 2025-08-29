@@ -75,30 +75,34 @@ class Plugin implements Container
 	 */
 	private function registerDefaultBindings(): void
 	{
-		$this->instance('settings.repository', new Settings\Store());
+		$this->instance('settings.store', new Settings\Store());
 
 		$this->instance('settings.registrar', new Settings\Registrar(
-			$this->get('settings.repository'))
+			$this->get('settings.store'))
 		);
 
-		$this->instance('rewrite', new Rewrite(
-			$this->get('settings.repository'))
+		$this->instance('support.rewrite', new Support\Rewrite(
+			$this->get('settings.store'))
 		);
 
 		$this->instance('post.type', new PostType(
-			$this->get('settings.repository'),
-			$this->get('rewrite')
+			$this->get('settings.store'),
+			$this->get('support.rewrite')
 		));
 
-		$this->instance('author',    new Author($this->get('rewrite')));
-		$this->instance('taxonomy',  new Taxonomy($this->get('rewrite')));
+		$this->instance('author', new Author(
+			$this->get('settings.store'),
+			$this->get('support.rewrite')
+		));
+
+		$this->instance('taxonomy',  new Taxonomy($this->get('support.rewrite')));
 		$this->instance('post.meta', new PostMeta());
 		$this->instance('editor',    new Editor());
 
 		// Admin only.
 		if (is_admin()) {
 			$this->instance('settings.page', new Settings\Page(
-				$this->get('settings.repository'))
+				$this->get('settings.store'))
 			);
 		}
 	}

@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace X3P0\Portfolio;
 
 use X3P0\Portfolio\Contracts\Bootable;
+use X3P0\Portfolio\Support\Rewrite;
 
 class Taxonomy implements Bootable
 {

@@ -55,14 +55,14 @@ class Registrar implements Bootable
 	 */
 	public function sanitize(array $settings): array
 	{
-		$base = $this->sanitizeRewriteSlug($settings['portfolio_rewrite_base']);
+		$base = static::sanitizeRewriteSlug($settings['portfolio_rewrite_base']);
 
 		// Set rewrite slugs.
 		$settings['portfolio_rewrite_base'] = $base ?: 'portfolio';
-		$settings['project_rewrite_base']   = $this->sanitizeRewriteSlug($settings['project_rewrite_base']);
-		$settings['category_rewrite_base']  = $this->sanitizeRewriteSlug($settings['category_rewrite_base']);
-		$settings['tag_rewrite_base']       = $this->sanitizeRewriteSlug($settings['tag_rewrite_base']);
-		$settings['author_rewrite_base']    = $this->sanitizeRewriteSlug($settings['author_rewrite_base']);
+		$settings['project_rewrite_base']   = static::sanitizeRewriteSlug($settings['project_rewrite_base']);
+		$settings['category_rewrite_base']  = static::sanitizeRewriteSlug($settings['category_rewrite_base']);
+		$settings['tag_rewrite_base']       = static::sanitizeRewriteSlug($settings['tag_rewrite_base']);
+		$settings['author_rewrite_base']    = static::sanitizeRewriteSlug($settings['author_rewrite_base']);
 
 		// Set the portfolio title.
 		$settings['portfolio_title'] = $settings['portfolio_title']
@@ -119,7 +119,7 @@ class Registrar implements Bootable
 	/**
 	 * Helper function for sanitizing rewrite slugs.
 	 */
-	private function sanitizeRewriteSlug(string $slug): string
+	private static function sanitizeRewriteSlug(string $slug): string
 	{
 		return $slug ? trim(strip_tags($slug), '/') : '';
 	}

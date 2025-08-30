@@ -15,7 +15,7 @@ namespace X3P0\Portfolio;
 
 use X3P0\Portfolio\Contracts\Bootable;
 use X3P0\Portfolio\Settings\Store;
-use X3P0\Portfolio\Support\Rewrite;
+use X3P0\Portfolio\Support\{Definitions, Rewrite};
 
 /**
  * Handles actions and filters related to portfolio project authors.
@@ -47,7 +47,7 @@ class Author implements Bootable
 	 */
 	public function register(): void
 	{
-		$project_type = PostType::NAME;
+		$project_type = Definitions::PROJECT_POST_TYPE;
 		$author_slug  = $this->rewrite->getAuthorSlug();
 
 		// Where to place the rewrite rules. If no rewrite base, put
@@ -77,7 +77,7 @@ class Author implements Bootable
 		int $author_id,
 		string $author_nicename
 	): string {
-		if (PostType::NAME !== get_post_type()) {
+		if (Definitions::PROJECT_POST_TYPE !== get_post_type()) {
 			return $link;
 		}
 
@@ -88,7 +88,7 @@ class Author implements Bootable
 
 		return add_query_arg(
 			[
-				'post_type'   => PostType::NAME,
+				'post_type'   => Definitions::PROJECT_POST_TYPE,
 				'author_name' => $author_nicename
 			],
 			home_url('/')
@@ -100,7 +100,7 @@ class Author implements Bootable
 	 */
 	protected function isAuthorArchive(): bool
 	{
-		return is_post_type_archive(PostType::NAME) && is_author();
+		return is_post_type_archive(Definitions::PROJECT_POST_TYPE) && is_author();
 	}
 
 	/**

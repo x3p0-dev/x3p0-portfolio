@@ -13,16 +13,13 @@ declare(strict_types=1);
 
 namespace X3P0\Portfolio\Settings;
 
+use X3P0\Portfolio\Support\Definitions;
+
 /**
  * Provides easy access to the plugin settings.
  */
 class Store
 {
-	/**
-	 * The name of the store (database option).
-	 */
-	public const NAME = 'x3p0_portfolio';
-
 	/**
 	 * Stores a copy of the settings from the database option.
 	 */
@@ -67,7 +64,7 @@ class Store
 	{
 		if (! isset($this->settings)) {
 			$this->settings = wp_parse_args(
-				get_option(self::NAME),
+				get_option(Definitions::DATABASE_OPTION),
 				$this->getDefaults()
 			);
 		}

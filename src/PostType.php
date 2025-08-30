@@ -16,15 +16,10 @@ namespace X3P0\Portfolio;
 use WP_Post;
 use X3P0\Portfolio\Contracts\Bootable;
 use X3P0\Portfolio\Settings\Store;
-use X3P0\Portfolio\Support\Rewrite;
+use X3P0\Portfolio\Support\{Definitions, Rewrite};
 
 class PostType implements Bootable
 {
-	/**
-	 * Post type name.
-	 */
-	public const NAME = 'portfolio_project';
-
 	/**
 	 * Sets up the default object state.
 	 */
@@ -57,7 +52,7 @@ class PostType implements Bootable
 	 */
 	public function register(): void
 	{
-		register_post_type(self::NAME, [
+		register_post_type(Definitions::PROJECT_POST_TYPE, [
 			'description'         => $this->settings->get('description'),
 			'public'              => true,
 			'publicly_queryable'  => true,
@@ -73,8 +68,8 @@ class PostType implements Bootable
 			'delete_with_user'    => false,
 			'hierarchical'        => false,
 			'has_archive'         => $this->rewrite->getPortfolioSlug(),
-			'query_var'           => self::NAME,
-			'capability_type'     => self::NAME,
+			'query_var'           => Definitions::PROJECT_POST_TYPE,
+			'capability_type'     => Definitions::PROJECT_POST_TYPE,
 			'map_meta_cap'        => true,
 
 			// Post type capabilities.
@@ -159,7 +154,7 @@ class PostType implements Bootable
 	 */
 	public function archiveTitle(string $title, string $post_type): string
 	{
-		return self::NAME === $post_type
+		return Definitions::PROJECT_POST_TYPE === $post_type
 			? $this->settings->get('portfolio_title')
 			: $title;
 	}
@@ -169,7 +164,7 @@ class PostType implements Bootable
 	 */
 	public function enterTitleHere(string $title, WP_Post $post): string
 	{
-		return self::NAME === $post->post_type
+		return Definitions::PROJECT_POST_TYPE === $post->post_type
 			? esc_html__('Enter project title', 'x3p0-portfolio')
 			: $title;
 	}
@@ -179,7 +174,7 @@ class PostType implements Bootable
 	 */
 	public function bulkPostUpdatedMessages(array $messages, array $counts): array
 	{
-		$type = self::NAME;
+		$type = Definitions::PROJECT_POST_TYPE;
 
 		$messages[$type]['updated']   = _n('%s project updated.',                             '%s projects updated.',                               $counts['updated'],   'x3p0-portfolio');
 		$messages[$type]['locked']    = _n('%s project not updated, somebody is editing it.', '%s projects not updated, somebody is editing them.', $counts['locked'],    'x3p0-portfolio');
@@ -197,7 +192,7 @@ class PostType implements Bootable
 	{
 		global $post, $post_ID;
 
-		$project_type = self::NAME;
+		$project_type = Definitions::PROJECT_POST_TYPE;
 
 		if ($project_type !== $post->post_type) {
 			return $messages;

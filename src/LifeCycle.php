@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace X3P0\Portfolio;
 
+use X3P0\Portfolio\Support\Definitions;
+
 /**
  * A static class that handles the various duties during the plugin's lifecycle.
  * This class includes static methods for activating, deactivating, uninstalling,
@@ -74,7 +76,7 @@ class LifeCycle
 		}
 
 		// Delete plugin options.
-		delete_option('x3p0_portfolio');
+		delete_option(Definitions::DATABASE_OPTION);
 
 		// If the administrator role exists, remove added capabilities
 		// that the plugin added.

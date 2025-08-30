@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace X3P0\Portfolio\Settings;
 
 use X3P0\Portfolio\Contracts\Bootable;
+use X3P0\Portfolio\Support\Definitions;
 
 /**
  * Registers the plugin settings with WordPress.
@@ -39,7 +40,7 @@ class Registrar implements Bootable
 	 */
 	public function register(): void
 	{
-		register_setting(Store::NAME, Store::NAME, [
+		register_setting(Definitions::DATABASE_OPTION, Definitions::DATABASE_OPTION, [
 			'type'              => 'array',
 			'label'             => __('Portfolio Settings', 'x3p0-portfolio'),
 			'description'       => __('An array of settings for the X3P0: Portfolio plugin.', 'x3p0-portfolio'),

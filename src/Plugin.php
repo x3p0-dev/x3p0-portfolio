@@ -78,19 +78,19 @@ class Plugin implements Container
 		$this->instance('settings.store', new Settings\Store());
 
 		$this->instance('settings.registrar', new Settings\Registrar(
-			$this->get('settings.store'))
-		);
+			$this->get('settings.store')
+		));
 
 		$this->instance('support.rewrite', new Support\Rewrite(
-			$this->get('settings.store'))
-		);
+			$this->get('settings.store')
+		));
 
-		$this->instance('post.type', new PostType(
+		$this->instance('author', new Author(
 			$this->get('settings.store'),
 			$this->get('support.rewrite')
 		));
 
-		$this->instance('author', new Author(
+		$this->instance('post.type', new PostType(
 			$this->get('settings.store'),
 			$this->get('support.rewrite')
 		));

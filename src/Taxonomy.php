@@ -14,20 +14,10 @@ declare(strict_types=1);
 namespace X3P0\Portfolio;
 
 use X3P0\Portfolio\Contracts\Bootable;
-use X3P0\Portfolio\Support\Rewrite;
+use X3P0\Portfolio\Support\{Definitions, Rewrite};
 
 class Taxonomy implements Bootable
 {
-	/**
-	 * Stores the category taxonomy name.
-	 */
-	public const CATEGORY_NAME = 'portfolio_category';
-
-	/**
-	 * Stores the tag taxonomy name.
-	 */
-	public const TAG_NAME = 'portfolio_tag';
-
 	/**
 	 * Sets up the default object state.
 	 */
@@ -49,7 +39,7 @@ class Taxonomy implements Bootable
 	 */
 	public function register(): void
 	{
-		register_taxonomy(self::CATEGORY_NAME, PostType::NAME, [
+		register_taxonomy(Definitions::CATEGORY_TAXONOMY, Definitions::PROJECT_POST_TYPE, [
 			'public'            => true,
 			'show_ui'           => true,
 			'show_in_nav_menus' => true,
@@ -57,7 +47,7 @@ class Taxonomy implements Bootable
 			'show_tagcloud'     => true,
 			'show_admin_column' => true,
 			'hierarchical'      => true,
-			'query_var'         => self::CATEGORY_NAME,
+			'query_var'         => Definitions::CATEGORY_TAXONOMY,
 			'capabilities'      => [
 				'manage_terms' => 'manage_portfolio_categories',
 				'edit_terms'   => 'edit_portfolio_categories',
@@ -98,7 +88,7 @@ class Taxonomy implements Bootable
 		]);
 
 		// Set up the arguments for the portfolio tag taxonomy.
-		register_taxonomy(self::TAG_NAME, PostType::NAME, [
+		register_taxonomy(Definitions::TAG_TAXONOMY, Definitions::PROJECT_POST_TYPE, [
 			'public'            => true,
 			'show_ui'           => true,
 			'show_in_nav_menus' => true,
@@ -106,7 +96,7 @@ class Taxonomy implements Bootable
 			'show_tagcloud'     => true,
 			'show_admin_column' => true,
 			'hierarchical'      => false,
-			'query_var'         => self::TAG_NAME,
+			'query_var'         => Definitions::TAG_TAXONOMY,
 			'capabilities'      => [
 				'manage_terms' => 'manage_portfolio_tags',
 				'edit_terms'   => 'edit_portfolio_tags',
@@ -153,7 +143,7 @@ class Taxonomy implements Bootable
 	public function termUpdatedMessages(array $messages): array
 	{
 		// Add the portfolio category messages.
-		$messages[self::CATEGORY_NAME] = [
+		$messages[Definitions::CATEGORY_TAXONOMY] = [
 			0 => '',
 			1 => __('Category added.',       'x3p0-portfolio'),
 			2 => __('Category deleted.',     'x3p0-portfolio'),
@@ -164,7 +154,7 @@ class Taxonomy implements Bootable
 		];
 
 		// Add the portfolio tag messages.
-		$messages[self::TAG_NAME] = [
+		$messages[Definitions::TAG_TAXONOMY] = [
 			0 => '',
 			1 => __('Tag added.',       'x3p0-portfolio'),
 			2 => __('Tag deleted.',     'x3p0-portfolio'),

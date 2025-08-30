@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace X3P0\Portfolio\Settings;
 
 use X3P0\Portfolio\Contracts\Bootable;
-use X3P0\Portfolio\PostType;
+use X3P0\Portfolio\Support\Definitions;
 
 /**
  * Implements the settings page for the plugin in the WordPress backend.
@@ -50,7 +50,7 @@ class Page implements Bootable
 	public function register(): void
 	{
 		$this->page = add_submenu_page(
-			'edit.php?post_type=' . PostType::NAME,
+			'edit.php?post_type=' . Definitions::PROJECT_POST_TYPE,
 			esc_html__('Portfolio Settings', 'x3p0-portfolio'),
 			esc_html__('Settings', 'x3p0-portfolio'),
 			'manage_options',
@@ -126,7 +126,7 @@ class Page implements Bootable
 			<?php settings_errors(); ?>
 
 			<form method="post" action="options.php">
-				<?php settings_fields(Store::NAME); ?>
+				<?php settings_fields(Definitions::DATABASE_OPTION); ?>
 				<?php do_settings_sections($this->page); ?>
 				<?php submit_button(esc_attr__('Update Settings', 'x3p0-portfolio')); ?>
 			</form>
@@ -232,12 +232,12 @@ class Page implements Bootable
 
 	private function getFieldId(string $field): string
 	{
-		return Store::NAME . "_{$field}";
+		return Definitions::DATABASE_OPTION . "_{$field}";
 	}
 
 	private function getFieldName(string $field): string
 	{
-		return Store::NAME . "[{$field}]";
+		return Definitions::DATABASE_OPTION . "[{$field}]";
 	}
 
 	private function getFieldValue(string $field): string

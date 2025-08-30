@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace X3P0\Portfolio;
 
 use X3P0\Portfolio\Contracts\Bootable;
+use X3P0\Portfolio\Support\Definitions;
 
 /**
  * Registers post meta for the plugin.
@@ -33,17 +34,9 @@ class PostMeta implements Bootable
 	 */
 	public function register(): void
 	{
-		$post_type = PostType::NAME;
+		$type = Definitions::PROJECT_POST_TYPE;
 
-		register_post_meta($post_type, "{$post_type}_url", [
-			'label'             => __('URL', 'x3p-portfolio'),
-			'sanitize_callback' => 'wp_strip_all_tags',
-			'single'            => true,
-			'show_in_rest'      => true,
-			'type'              => 'string'
-		]);
-
-		register_post_meta($post_type, "{$post_type}_client", [
+		register_post_meta($type, Definitions::CLIENT_POST_META, [
 			'label'             => __('Client', 'portfolio'),
 			'sanitize_callback' => 'wp_strip_all_tags',
 			'single'            => true,
@@ -51,8 +44,16 @@ class PostMeta implements Bootable
 			'type'              => 'string'
 		]);
 
-		register_post_meta($post_type, "{$post_type}_location", [
+		register_post_meta($type, Definitions::LOCATION_POST_META, [
 			'label'             => __('Location', 'x3p0-portfolio'),
+			'sanitize_callback' => 'wp_strip_all_tags',
+			'single'            => true,
+			'show_in_rest'      => true,
+			'type'              => 'string'
+		]);
+
+		register_post_meta($type, Definitions::URL_POST_META, [
+			'label'             => __('URL', 'x3p-portfolio'),
 			'sanitize_callback' => 'wp_strip_all_tags',
 			'single'            => true,
 			'show_in_rest'      => true,

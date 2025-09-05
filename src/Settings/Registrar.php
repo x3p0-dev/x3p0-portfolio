@@ -60,7 +60,7 @@ class Registrar implements Bootable
 		$base = static::sanitizeRewriteSlug($settings['portfolio_rewrite_base']);
 
 		// Set rewrite slugs.
-		$settings['portfolio_rewrite_base'] = $base ?: 'portfolio';
+		$settings['portfolio_rewrite_base'] = $base ?: $defaults['portfolio_rewrite_base'];
 		$settings['project_rewrite_base']   = static::sanitizeRewriteSlug($settings['project_rewrite_base']);
 		$settings['category_rewrite_base']  = static::sanitizeRewriteSlug($settings['category_rewrite_base']);
 		$settings['tag_rewrite_base']       = static::sanitizeRewriteSlug($settings['tag_rewrite_base']);
@@ -81,37 +81,26 @@ class Registrar implements Bootable
 		// objects. The order of these should not be changed. Each
 		// conflict is handled based on an object type that is higher in
 		// the hierarchy. If neither have a rewrite base defined, the
-		// object higher in the hierarchy wins out.
+		// object higher in the hierarchy wins out and the secondary
+		// rewrite rule base is assigned its fallback.
 		// -------------------------------------------------------------
+		$priorities = [
+			'project_rewrite_base',
+			'category_rewrite_base',
+			'author_rewrite_base',
+			'tag_rewrite_base'
+		];
 
-		// No project or category base, projects win.
-		if (! $settings['project_rewrite_base'] && ! $settings['category_rewrite_base']) {
-			$settings['category_rewrite_base'] = $defaults['category_rewrite_base'];
-		}
+		foreach ($priorities as $i => $primary) {
+			if ($settings[$primary]) {
+				continue;
+			}
 
-		// No project or tag base, projects win.
-		if (! $settings['project_rewrite_base'] && ! $settings['tag_rewrite_base']) {
-			$settings['tag_rewrite_base'] = $defaults['tag_rewrite_base'];
-		}
-
-		// No project or author base, projects win.
-		if (! $settings['project_rewrite_base'] && ! $settings['author_rewrite_base']) {
-			$settings['author_rewrite_base'] = $defaults['author_rewrite_base'];
-		}
-
-		// No category or tag base, categories win.
-		if (! $settings['category_rewrite_base'] && ! $settings['tag_rewrite_base']) {
-			$settings['tag_rewrite_base'] = $defaults['tag_rewrite_base'];
-		}
-
-		// No category or author base, categories win.
-		if (! $settings['category_rewrite_base'] && ! $settings['author_rewrite_base']) {
-			$settings['author_rewrite_base'] = $defaults['author_rewrite_base'];
-		}
-
-		// No author or tag base, authors win.
-		if (! $settings['author_rewrite_base'] && ! $settings['tag_rewrite_base']) {
-			$settings['tag_rewrite_base'] = $defaults['tag_rewrite_base'];
+			foreach (array_slice($priorities, $i + 1) as $secondary) {
+				if (! $settings[$secondary]) {
+					$settings[$secondary] = $defaults[$secondary];
+				}
+			}
 		}
 
 		// Return the validated/sanitized settings.

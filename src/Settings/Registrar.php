@@ -55,6 +55,8 @@ class Registrar implements Bootable
 	 */
 	public function sanitize(array $settings): array
 	{
+		$defaults = $this->store->getDefaults();
+
 		$base = static::sanitizeRewriteSlug($settings['portfolio_rewrite_base']);
 
 		// Set rewrite slugs.
@@ -84,32 +86,32 @@ class Registrar implements Bootable
 
 		// No project or category base, projects win.
 		if (! $settings['project_rewrite_base'] && ! $settings['category_rewrite_base']) {
-			$settings['category_rewrite_base'] = 'categories';
+			$settings['category_rewrite_base'] = $defaults['category_rewrite_base'];
 		}
 
 		// No project or tag base, projects win.
 		if (! $settings['project_rewrite_base'] && ! $settings['tag_rewrite_base']) {
-			$settings['tag_rewrite_base'] = 'tags';
+			$settings['tag_rewrite_base'] = $defaults['tag_rewrite_base'];
 		}
 
 		// No project or author base, projects win.
 		if (! $settings['project_rewrite_base'] && ! $settings['author_rewrite_base']) {
-			$settings['author_rewrite_base'] = 'authors';
+			$settings['author_rewrite_base'] = $defaults['author_rewrite_base'];
 		}
 
 		// No category or tag base, categories win.
 		if (! $settings['category_rewrite_base'] && ! $settings['tag_rewrite_base']) {
-			$settings['tag_rewrite_base'] = 'tags';
+			$settings['tag_rewrite_base'] = $defaults['tag_rewrite_base'];
 		}
 
 		// No category or author base, categories win.
 		if (! $settings['category_rewrite_base'] && ! $settings['author_rewrite_base']) {
-			$settings['author_rewrite_base'] = 'authors';
+			$settings['author_rewrite_base'] = $defaults['author_rewrite_base'];
 		}
 
 		// No author or tag base, authors win.
 		if (! $settings['author_rewrite_base'] && ! $settings['tag_rewrite_base']) {
-			$settings['tag_rewrite_base'] = 'tags';
+			$settings['tag_rewrite_base'] = $defaults['tag_rewrite_base'];
 		}
 
 		// Return the validated/sanitized settings.

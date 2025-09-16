@@ -21,7 +21,7 @@ use X3P0\Portfolio\Settings\Store;
 class Rewrite
 {
 	/**
-	 * Setups up the default object state.
+	 * Sets up the default object state.
 	 */
 	public function __construct(protected Store $settings)
 	{}
@@ -38,7 +38,7 @@ class Rewrite
 	/**
 	 * Helper for appending a path to the portfolio slug.
 	 */
-	public function appendToSlug(string $path): string
+	public function appendTo(string $path): string
 	{
 		$portfolio_slug = $this->getPortfolioSlug();
 
@@ -50,7 +50,7 @@ class Rewrite
 	 */
 	public function getProjectSlug(): string
 	{
-		return $this->appendToSlug($this->settings->get('project_rewrite_base'));
+		return $this->appendTo($this->settings->get('project_rewrite_base'));
 	}
 
 	/**
@@ -58,7 +58,7 @@ class Rewrite
 	 */
 	public function getAuthorSlug(): string
 	{
-		return $this->appendToSlug($this->settings->get('author_rewrite_base'));
+		return $this->appendTo($this->settings->get('author_rewrite_base'));
 	}
 
 	/**
@@ -66,7 +66,7 @@ class Rewrite
 	 */
 	public function getCategorySlug(): string
 	{
-		return $this->appendToSlug($this->settings->get('category_rewrite_base'));
+		return $this->appendTo($this->settings->get('category_rewrite_base'));
 	}
 
 	/**
@@ -74,6 +74,6 @@ class Rewrite
 	 */
 	public function getTagSlug(): string
 	{
-		return $this->appendToSlug($this->settings->get('tag_rewrite_base'));
+		return $this->appendTo($this->settings->get('tag_rewrite_base'));
 	}
 }

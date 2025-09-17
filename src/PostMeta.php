@@ -34,9 +34,9 @@ class PostMeta implements Bootable
 	 */
 	public function register(): void
 	{
-		$type = Definitions::PROJECT_POST_TYPE;
+		$type = Definitions::POST_TYPE_PROJECT;
 
-		register_post_meta($type, Definitions::CLIENT_POST_META, [
+		register_post_meta($type, Definitions::POST_META_CLIENT, [
 			'label'             => __('Client', 'portfolio'),
 			'sanitize_callback' => 'wp_strip_all_tags',
 			'single'            => true,
@@ -44,7 +44,7 @@ class PostMeta implements Bootable
 			'type'              => 'string'
 		]);
 
-		register_post_meta($type, Definitions::LOCATION_POST_META, [
+		register_post_meta($type, Definitions::POST_META_LOCATION, [
 			'label'             => __('Location', 'x3p0-portfolio'),
 			'sanitize_callback' => 'wp_strip_all_tags',
 			'single'            => true,
@@ -52,7 +52,7 @@ class PostMeta implements Bootable
 			'type'              => 'string'
 		]);
 
-		register_post_meta($type, Definitions::URL_POST_META, [
+		register_post_meta($type, Definitions::POST_META_URL, [
 			'label'             => __('URL', 'x3p-portfolio'),
 			'sanitize_callback' => 'wp_strip_all_tags',
 			'single'            => true,

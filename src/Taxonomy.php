@@ -39,7 +39,7 @@ class Taxonomy implements Bootable
 	 */
 	public function register(): void
 	{
-		register_taxonomy(Definitions::CATEGORY_TAXONOMY, Definitions::PROJECT_POST_TYPE, [
+		register_taxonomy(Definitions::TAXONOMY_CATEGORY, Definitions::POST_TYPE_PROJECT, [
 			'public'            => true,
 			'show_ui'           => true,
 			'show_in_nav_menus' => true,
@@ -47,7 +47,7 @@ class Taxonomy implements Bootable
 			'show_tagcloud'     => true,
 			'show_admin_column' => true,
 			'hierarchical'      => true,
-			'query_var'         => Definitions::CATEGORY_TAXONOMY,
+			'query_var'         => Definitions::TAXONOMY_CATEGORY,
 			'capabilities'      => [
 				'manage_terms' => 'manage_portfolio_categories',
 				'edit_terms'   => 'edit_portfolio_categories',
@@ -88,7 +88,7 @@ class Taxonomy implements Bootable
 		]);
 
 		// Set up the arguments for the portfolio tag taxonomy.
-		register_taxonomy(Definitions::TAG_TAXONOMY, Definitions::PROJECT_POST_TYPE, [
+		register_taxonomy(Definitions::TAXONOMY_TAG, Definitions::POST_TYPE_PROJECT, [
 			'public'            => true,
 			'show_ui'           => true,
 			'show_in_nav_menus' => true,
@@ -96,7 +96,7 @@ class Taxonomy implements Bootable
 			'show_tagcloud'     => true,
 			'show_admin_column' => true,
 			'hierarchical'      => false,
-			'query_var'         => Definitions::TAG_TAXONOMY,
+			'query_var'         => Definitions::TAXONOMY_TAG,
 			'capabilities'      => [
 				'manage_terms' => 'manage_portfolio_tags',
 				'edit_terms'   => 'edit_portfolio_tags',
@@ -143,7 +143,7 @@ class Taxonomy implements Bootable
 	public function termUpdatedMessages(array $messages): array
 	{
 		// Add the portfolio category messages.
-		$messages[Definitions::CATEGORY_TAXONOMY] = [
+		$messages[Definitions::TAXONOMY_CATEGORY] = [
 			0 => '',
 			1 => __('Category added.',       'x3p0-portfolio'),
 			2 => __('Category deleted.',     'x3p0-portfolio'),
@@ -154,7 +154,7 @@ class Taxonomy implements Bootable
 		];
 
 		// Add the portfolio tag messages.
-		$messages[Definitions::TAG_TAXONOMY] = [
+		$messages[Definitions::TAXONOMY_TAG] = [
 			0 => '',
 			1 => __('Tag added.',       'x3p0-portfolio'),
 			2 => __('Tag deleted.',     'x3p0-portfolio'),

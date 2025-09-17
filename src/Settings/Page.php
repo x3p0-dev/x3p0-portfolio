@@ -50,7 +50,7 @@ class Page implements Bootable
 	public function register(): void
 	{
 		$this->page = add_submenu_page(
-			'edit.php?post_type=' . Definitions::PROJECT_POST_TYPE,
+			'edit.php?post_type=' . Definitions::POST_TYPE_PROJECT,
 			esc_html__('Portfolio Settings', 'x3p0-portfolio'),
 			esc_html__('Settings', 'x3p0-portfolio'),
 			'manage_options',

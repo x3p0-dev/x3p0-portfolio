@@ -26,30 +26,30 @@ class Definitions
 	/**
 	 * $portfolio_slug portfolio project post type.
 	 */
-	public const PROJECT_POST_TYPE = 'portfolio_project';
+	public const POST_TYPE_PROJECT = 'portfolio_project';
 
 	/**
 	 * The portfolio project client post meta key.
 	 */
-	public const CLIENT_POST_META = 'portfolio_project_client';
+	public const POST_META_CLIENT = 'portfolio_project_client';
 
 	/**
 	 * The portfolio project location post meta key.
 	 */
-	public const LOCATION_POST_META = 'portfolio_project_location';
+	public const POST_META_LOCATION = 'portfolio_project_location';
 
 	/**
 	 * The portfolio project URL post meta key.
 	 */
-	public const URL_POST_META = 'portfolio_project_url';
+	public const POST_META_URL = 'portfolio_project_url';
 
 	/**
 	 * The portfolio category taxonomy.
 	 */
-	public const CATEGORY_TAXONOMY = 'portfolio_category';
+	public const TAXONOMY_CATEGORY = 'portfolio_category';
 
 	/**
 	 * The portfolio tag taxonomy.
 	 */
-	public const TAG_TAXONOMY = 'portfolio_tag';
+	public const TAXONOMY_TAG = 'portfolio_tag';
 }

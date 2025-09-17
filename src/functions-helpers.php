@@ -14,19 +14,17 @@ declare(strict_types=1);
 namespace X3P0\Portfolio;
 
 /**
- * Stores the single instance of the plugin in the static `$plugin` variable.
- * Devs can access any class/component by passing in its reference via the
- * `$abstract` parameter (useful for accessing hooks within classes).
- *
- * @return mixed|Plugin
+ * Stores a globally accessible single instance of the plugin in the static
+ * `$app` variable. Devs can access any class/component by passing in a binding
+ * reference via `app()->get($abstract)`.
  */
-function plugin(): mixed
+function app(): App
 {
-	static $plugin;
+	static $app;
 
-	if (! $plugin instanceof Plugin) {
-		do_action('x3p0/portfolio/init', $plugin = new Plugin());
+	if (! $app instanceof App) {
+		do_action('x3p0/portfolio/init', $app = new App());
 	}
 
-	return $plugin;
+	return $app;
 }

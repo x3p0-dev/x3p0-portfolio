@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Plugin container implementation.
+ * Plugin lifecycle helper.
  *
  * @author    Justin Tadlock <justintadlock@gmail.com>
  * @copyright Copyright (c) 2025, Justin Tadlock
@@ -13,97 +13,108 @@ declare(strict_types=1);
 
 namespace X3P0\Portfolio;
 
-use X3P0\Portfolio\Contracts\{Bootable, Container};
+use X3P0\Portfolio\Support\Definitions;
 
 /**
- * The plugin class is a simple container used to store and reference the
- * various Plugin components. It doesn't support automatic dependency injection
- * (manual only) because it would be overkill for this project.
+ * A static class that handles the various duties during the plugin's lifecycle.
+ * This class includes static methods for activating, deactivating, uninstalling,
+ * and bootstrapping the plugin.
  */
-class Plugin implements Container
+class Plugin
 {
 	/**
-	 * Stored definitions of single instances.
+	 * Bootstraps the plugin and should be used as a callback on the
+	 * `plugins_loaded` action hook.
 	 */
-	private array $instances = [];
-
-	/**
-	 * Registers the default container bindings.
-	 */
-	public function __construct()
+	public static function boot(): void
 	{
-		$this->registerDefaultBindings();
+		app()->boot();
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * Runs when the plugin is activated and should be called via the
+	 * `register_activation_hook()` function.
 	 */
-	#[\Override]
-	public function boot(): void
+	public static function activate(): void
 	{
-		foreach ($this->instances as $binding) {
-			$binding instanceof Bootable && $binding->boot();
+		if ($role = get_role('administrator')) {
+			// Taxonomy caps.
+			$role->add_cap('manage_portfolio_categories');
+			$role->add_cap('edit_portfolio_categories');
+			$role->add_cap('delete_portfolio_categories');
+			$role->add_cap('assign_portfolio_categories');
+
+			$role->add_cap('manage_portfolio_tags');
+			$role->add_cap('edit_portfolio_tags');
+			$role->add_cap('delete_portfolio_tags');
+			$role->add_cap('assign_portfolio_tags');
+
+			// Post type caps.
+			$role->add_cap('create_portfolio_projects');
+			$role->add_cap('edit_portfolio_projects');
+			$role->add_cap('edit_others_portfolio_projects');
+			$role->add_cap('publish_portfolio_projects');
+			$role->add_cap('read_private_portfolio_projects');
+			$role->add_cap('delete_portfolio_projects');
+			$role->add_cap('delete_private_portfolio_projects');
+			$role->add_cap('delete_published_portfolio_projects');
+			$role->add_cap('delete_others_portfolio_projects');
+			$role->add_cap('edit_private_portfolio_projects');
+			$role->add_cap('edit_published_portfolio_projects');
 		}
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * Runs when the plugin is deactivated and should be called via the
+	 * `register_deactivation_hook()` function.
 	 */
-	public function instance(string $abstract, mixed $instance): void
-	{
-		$this->instances[$abstract] = $instance;
-	}
+	public static function deactivate(): void
+	{}
 
 	/**
-	 * {@inheritdoc}
+	 * Runs when the plugin is uninstalled and should be called via the
+	 * `register_uninstall_hook()` function.
 	 */
-	public function get(string $abstract): mixed
+	public static function uninstall(): void
 	{
-		return $this->has($abstract) ? $this->instances[$abstract] : null;
-	}
+		if (! defined('WP_UNINSTALL_PLUGIN')) {
+			wp_die(sprintf(
+				__('%s should only be called when uninstalling the plugin.', 'x3p0-portfolio'),
+				'<code>' . __METHOD__ . '</code>'
+			));
+		}
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function has(string $abstract): bool
-	{
-		return isset($this->instances[$abstract]);
-	}
+		// Delete plugin options.
+		delete_option(Definitions::DATABASE_OPTION);
 
-	/**
-	 * Registers the default bindings we need to run the Plugin.
-	 */
-	private function registerDefaultBindings(): void
-	{
-		$this->instance('settings.store', new Settings\Store());
+		// If the administrator role exists, remove added capabilities
+		// that the plugin added.
+		if ($role = get_role('administrator')) {
 
-		$this->instance('settings.registrar', new Settings\Registrar(
-			$this->get('settings.store')
-		));
+			// Portfolio category taxonomy caps.
+			$role->remove_cap('manage_portfolio_categories');
+			$role->remove_cap('edit_portfolio_categories');
+			$role->remove_cap('delete_portfolio_categories');
+			$role->remove_cap('assign_portfolio_categories');
 
-		$this->instance('support.rewrite', new Support\Rewrite(
-			$this->get('settings.store')
-		));
+			// Portfolio tag taxonomy caps.
+			$role->remove_cap('manage_portfolio_tags');
+			$role->remove_cap('edit_portfolio_tags');
+			$role->remove_cap('delete_portfolio_tags');
+			$role->remove_cap('assign_portfolio_tags');
 
-		$this->instance('author', new Author(
-			$this->get('settings.store'),
-			$this->get('support.rewrite')
-		));
-
-		$this->instance('post.type', new PostType(
-			$this->get('settings.store'),
-			$this->get('support.rewrite')
-		));
-
-		$this->instance('taxonomy',  new Taxonomy($this->get('support.rewrite')));
-		$this->instance('post.meta', new PostMeta());
-		$this->instance('editor',    new Editor());
-
-		// Admin only.
-		if (is_admin()) {
-			$this->instance('settings.page', new Settings\Page(
-				$this->get('settings.store'))
-			);
+			// Portfolio project post type caps.
+			$role->remove_cap('create_portfolio_projects');
+			$role->remove_cap('edit_portfolio_projects');
+			$role->remove_cap('edit_others_portfolio_projects');
+			$role->remove_cap('publish_portfolio_projects');
+			$role->remove_cap('read_private_portfolio_projects');
+			$role->remove_cap('delete_portfolio_projects');
+			$role->remove_cap('delete_private_portfolio_projects');
+			$role->remove_cap('delete_published_portfolio_projects');
+			$role->remove_cap('delete_others_portfolio_projects');
+			$role->remove_cap('edit_private_portfolio_projects');
+			$role->remove_cap('edit_published_portfolio_projects');
 		}
 	}
 }

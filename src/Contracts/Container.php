@@ -16,7 +16,7 @@ namespace X3P0\Portfolio\Contracts;
 /**
  * A simple container used to store and reference the various Plugin components.
  */
-interface Container extends Bootable
+interface Container
 {
 	/**
 	 * Registers a single instance of a binding.

@@ -27,10 +27,10 @@ Autoload::register();
 require_once 'src/functions-helpers.php';
 
 # Register activation hook.
-register_activation_hook(__FILE__, [LifeCycle::class, 'activate']);
+register_activation_hook(__FILE__, [Plugin::class, 'activate']);
 
 # Register uninstall hook.
-register_uninstall_hook(__FILE__, [LifeCycle::class, 'uninstall']);
+register_uninstall_hook(__FILE__, [Plugin::class, 'uninstall']);
 
 # Bootstrap the plugin.
-add_action('plugins_loaded', [LifeCycle::class, 'boot'], PHP_INT_MIN);
+add_action('plugins_loaded', [Plugin::class, 'boot'], PHP_INT_MIN);

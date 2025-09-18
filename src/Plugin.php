@@ -28,7 +28,7 @@ class Plugin
 	 */
 	public static function boot(): void
 	{
-		app()->boot();
+		plugin()->boot();
 	}
 
 	/**

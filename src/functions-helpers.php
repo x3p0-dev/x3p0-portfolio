@@ -14,17 +14,17 @@ declare(strict_types=1);
 namespace X3P0\Portfolio;
 
 /**
- * Stores a globally accessible single instance of the plugin in the static
- * `$app` variable. Devs can access any class/component by passing in a binding
- * reference via `app()->get($abstract)`.
+ * Stores the single instance of the plugin in the static `$plugin` variable.
+ * Devs can access any concrete implementation by passing in a reference to its
+ * abstract identifier via `plugin()->get($abstract)`.
  */
-function app(): App
+function plugin(): App
 {
-	static $app;
+	static $plugin;
 
-	if (! $app instanceof App) {
-		do_action('x3p0/portfolio/init', $app = new App());
+	if (! $plugin instanceof App) {
+		do_action('x3p0/portfolio/init', $plugin = new App());
 	}
 
-	return $app;
+	return $plugin;
 }
